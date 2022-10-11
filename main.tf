@@ -1,23 +1,5 @@
-terraform {
-  required_providers {
-    google = {
-      source = "hashicorp/google"
-      version = "4.38.0"
-    }
-  }
-}
-
-
-
-provider "google" {
-  project = "project0829"
-  region  = "us-central1"
-  zone    = "us-central1-c"
-}
-
-
 resource "google_compute_firewall" "default" {
-  name    = "project-firewall"
+  name    = var.firewall-name
   network = google_compute_network.default.name
 
   allow {
@@ -33,7 +15,7 @@ resource "google_compute_firewall" "default" {
 }
 
 resource "google_compute_network" "default" {
-  name = "project-network"
+  name = var.network-name
 }
     
 
@@ -46,7 +28,7 @@ resource "google_service_account" "default" {
 }
 
 resource "google_compute_instance" "default" {
-  name         = "test"
+  name         = var.instance-name
   machine_type = "e2-medium"
   zone         = "us-central1-a"
 
@@ -92,7 +74,7 @@ resource "google_compute_instance" "default" {
 # }
 
 resource "google_container_cluster" "primary" {
-  name               = "moses-test-gke"
+  name               = var.container-cluster-name
   location           = "us-central1-a"
   initial_node_count = 3
   node_config {
